@@ -29,6 +29,7 @@ from langchain.chains import ConversationChain
 from typing import Mapping
 from typing import List
 
+import os
 load_dotenv()
 
 
@@ -55,7 +56,8 @@ def main():
         #     pdf_path = save_uploaded_file(uploaded_file)
         #     markdown_path =  pdf_to_markdown(pdf_path, uploaded_file)
 
-        markdown_path = "D:\Projects\LPMS\markdown_files\Markdown.md"
+        file_name = "Bid Sheet - Lawn Care Services1692713343.txt"
+        markdown_path = "D:\Projects\LPMS\markdown_files\Bid Sheet - Lawn Care Services1692713343.md"
         #Read the content of the Markdown file
         with open(markdown_path, "r", encoding="utf-8") as markdown_file:
             markdown_content = markdown_file.read()
@@ -91,24 +93,24 @@ def main():
                     st.session_state["summary"] += resp + "\n"
                     print(st.session_state["summary"])
 
-        selected_sections = st.multiselect("Select section numbers", range(1, len(sections) + 1))
-        selected_sections = [2,5,6]
+        # selected_sections = st.multiselect("Select section numbers", range(1, len(sections) + 1))
+        selected_sections = [1]
         response = ''
-        if st.button("Extract Key Info from these sections"):
+        if st.button("Extract Info From Key Sections"):
             with st.spinner("Processing"):
                 
-                query = "Extract key details from the text which are important for preparing bid."
-                resp = process_request(query, sections[selected_sections[0]], 1)
-                response += resp + "\n"
-                time.sleep(2)
+                # query = "Extract key details from the text which are important for preparing bid."
+                # resp = process_request(query, sections[selected_sections[0]], 1)
+                # response += resp + "\n"
+                # time.sleep(2)
                 
-                query = "Provide me a list of all the work/task that needs to be performed along with it's frequency for each month"
-                resp = process_request(query, sections[selected_sections[1]], 2)
-                response += resp + "\n"
-                time.sleep(2)
+                # query = "Provide me a list of all the work/task that needs to be performed along with it's frequency for each month and other details"
+                # resp = process_request(query, sections[selected_sections[0]], 2)
+                # response += resp + "\n"
+                # time.sleep(2)
               
-                query = "Provide me a list of all types of locations along with it's address, acreage and notes. Make sure you don't leave any location."
-                resp = process_request(query, sections[selected_sections[2]], 3)
+                query = "Provide me a list of all types of locations and other details associated with it. Make sure you don't leave any location."
+                resp = process_request(query, sections[selected_sections[0]], 3)
                 response += resp + "\n"
                 st.session_state["summary"] += response + "\n\n" 
                 # response = """{"Bid_Submission_Details": {"deadline": "SEPTEMBER 9, 2021 @ 2:00 PM", "inquiry": "Christie Spath, Purchasing, 401 Sgt. Ed Holcomb Blvd., Conroe, TX. 77304, Office: 936-522-3829", "submission_address": "USPS: City of Conroe, Soco Gorjon, City Secretary, P.O. Box 3066, Conroe, TX. 77305 or Physical: City of Conroe, Soco Gorjon, City Secretary, 300 West Davis St., Conroe, TX. 77301", "notes": "Submit electronically through Vendor Registry or three (3) copies of each proposal shall be CLEARLY MARKED \u201cBid #PK2122 \u2013 ANNUAL PARKS MOWING\u201d. Responses received later than the due date will not be accepted, and returned unopened."}, "task_frequency": [{"task": "Mow, Edge, Trim, Debris Disposal", "total frequency": "42.0", "month wise frequency": "Jan: 2, Feb: 2, Mar: 4, Apr: 4, May: 4, Jun: 5, Jul: 4, Aug: 5, Sep: 4, Oct: 4, Nov: 2, Dec: 2"}, {"task": "Undeveloped Property Mowing", "total frequency": "19.0", "month wise frequency": "Jan: 1, Feb: 1, Mar: 2, Apr: 2, May: 2, Jun: 2, Jul: 2, Aug: 2, Sep: 2, Oct: 1, Nov: 1, Dec: 1"}, {"task": "Fire Training Facility", "total frequency": "19.0", "month wise frequency": "Jan: 1, Feb: 1, Mar: 2, Apr: 2, May: 2, Jun: 2, Jul: 2, Aug: 2, Sep: 2, Oct: 1, Nov: 1, Dec: 1"}], "array": [{"name": "Candy Cane Park Complex", "address": "1202 - 1205 Candy Cane Lane / 1504 Parkwood West / 77301", "acreage": "27.0", "notes": "No ZTR at 1504 Parkwood West See map for boundaries"}, {"name": "Aquatic Center (interior)", "address": "1205 Candy Cane Lane / 77301", "acreage": "2.0", "notes": "Day & Time Constraints No ZTR or riding mowers Bagging clippings may be required"}, {"name": "Roberson Park", "address": "1301 Roberson St. / 77301", "acreage": "1.6", "notes": "Includes pathway to N. Frazier"}, {"name": "Milltown Park", "address": "600 York / 77301", "acreage": "2.3", "notes": ""}, {"name": "Conroe Founders Plaza", "address": "205 Metcalf St. / 77301", "acreage": "0.6", "notes": "No ZTR"}, {"name": "Heritage Place Park", "address": "500 Metcalf St. / 77301", "acreage": "2.9", "notes": ""}, {"name": "Stewarts Creek Park", "address": "1329 E. Dallas Street / 77301", "acreage": "9.0", "notes": "Including Entergy R.O.W. See map for boundaries"}, {"name": "Booker T. Washington Park", "address": "813 First St. / 77301", "acreage": "3.0", "notes": ""}, {"name": "Lewis Park", "address": "501 Park Place / 77301", "acreage": "5.0", "notes": ""}, {"name": "Dugan Park", "address": "719 E. Ave. G / 77301", "acreage": "0.6", "notes": "Vacant Lot"}, {"name": "Kasmiersky Park", "address": "889 Old Magnolia Rd. / 77304", "acreage": "9.0", "notes": ""}, {"name": "McDade Park", "address": "10310 FM 2854 / 77304", "acreage": "38.0", "notes": "Includes disc golf course See map for boundaries"}, {"name": "Flournoy Park", "address": "413 Tenth St. / 77301", "acreage": "4.0", "notes": ""}, {"name": "Dr. Martin Luther King, Jr. Park", "address": "1001 Dr. Martin Luther King, Jr. Place South", "acreage": "16.0", "notes": "Splash pad open seasonally (Mar \u2013 Oct)"}, {"name": "John Burge Park at Shadow Lakes", "address": "11050 John Burge Park St. / 77304", "acreage": "39.0", "notes": ""}, {"name": "Lions Park", "address": "1851 Northampton / 77303", "acreage": "3.5", "notes": ""}, {"name": "Lone Star Flag Park", "address": "212 I-45 North / 77301", "acreage": "3.5", "notes": "Limited mowing during wildflower season"}, {"name": "White Oak Point Park", "address": "3511 White Oak Point Dr. / 77304", "acreage": "2.0", "notes": ""}, {"name": "Wiggins Village Park", "address": "565 Bryant Rd. / 77303", "acreage": "12.0", "notes": ""}, {"name": "Oscar Johnson, Jr. Community Center", "address": "100 Park Place / 119 E. Ave G. / 77301", "acreage": "4.8", "notes": "Day & Time Constraints No ZTR or riding mowers in pool area. Bagging of clippings may be required in pool area See map for boundaries"}, {"name": "Hicks St. Property", "address": "NE corner San Jacinto at Hicks St. / 77301", "acreage": "0.5", "notes": "Vacant Lot"}, {"name": "Dallas Street Medians", "address": "Between Frazier St. and W. Davis", "acreage": "2.1", "notes": "Includes NW corner of Dallas @ N. Frazier"}, {"name": "Holly Hills Medians", "address": "Hillcrest @ N. Frazier St.", "acreage": "0.1", "notes": ""}, {"name": "Faith Walston Memorial", "address": "Dallas St. @ West Davis St.", "acreage": "0.2", "notes": ""},{"name": "I-45 Triangle & Medians", "address": "I-45 @ West Davis St.", "acreage": "0.9", "notes": "Beautification property"},{"name": "S. Frazier Medians", "address": "941 S. Frazier St.", "acreage": "1.2", "notes": "Beautification property includes Moore Family Memorial"},{"name": "Maurel Drive Medians", "address": "Between Longmire Rd & N. Loop 336", "acreage": "0.03", "notes": ""},{"name": "Montgomery Park Blvd.", "address": "Montgomery Park Blvd. @ N. Loop 336", "acreage": "0.3", "notes": ""},{"name": "Teas Road Medians", "address": "Teas Rd. @ FM 3083", "acreage": "0.2", "notes": ""},{"name": "Westview Blvd. Medians", "address": "Westview @ Wilson & Westview @ N. Loop 336", "acreage": "0.2", "notes": ""},{"name": "South Loop 336 Medians", "address": "1616 & 1648 S. Frazier 210 & 260 S. Loop 336", "acreage": "4.0", "notes": "Limited mowing during wildflower season See map for boundaries"},{"name": "Enterprise Row", "address": "Enterprise Row between S. Frazier & I-45 Feeder", "acreage": "8.6", "notes": "Entergy & pipeline ROW See map for boundaries"},{"name": "McDade Estates Property", "address": "1942, 1944 & 1946 O'Grady Dr. 1645, 1647, 1649 & 1651 White Oak Creek / 77304", "acreage": "2.0", "notes": "Vacant Lots"},{"name": "Artesian Lakes Property", "address": "200 Magnolia St. / 77304", "acreage": "0.6", "notes": "Vacant Lot"},{"name": "Main Street Parking", "address": "Main St. / 77301", "acreage": "0.3", "notes": "Jury Parking Lot South of Conroe Founders Plaza"},{"name": "Veterans Memorial Park", "address": "997 West Davis @ I-45 N.  / 77301", "acreage": "12.0", "notes": ""},{"name": "Conroe West Recreation Center", "address": "10245 Owen Drive / 77304", "acreage": "42.0", "notes": "See map for boundaries"},   {"name": "Conroe Tower/City Hall", "address": "300 W. Davis St. / 77301", "acreage": "0.5", "notes": "Fenced area between City Hall and Montgomery County Tax Office"},{"name": "Conroe Municipal Complex", "address": "700 Old Montgomery Road / 77304", "acreage": "4.1", "notes": ""},{"name": "Transportation Administration", "address": "202 Avenue A / 77301", "acreage": "0.4", "notes": ""},{"name": "Fire Station 1", "address": "300 Sgt. Ed Holcomb Blvd. North / 77304", "acreage": "2.3", "notes": "Restricted Access"},{"name": "Fire Station 2", "address": "425 E. Loop 336 / 77303", "acreage": "1.0", "notes": "Restricted Access"},{"name": "Fire Station 3", "address": "424 Foster Road / 77301", "acreage": "1.0", "notes": "Restricted Access"},{"name": "Fire Station 4", "address": "14901 Walter Woodson Drive. / 77384", "acreage": "3.2", "notes": "Restricted Access"},{"name": "Fire Station 5", "address": "1601 N. FM 3083 (Carter Moore Drive) / 77304", "acreage": "2.0", "notes": "Restricted Access"},    {"name": "Fire Station 6", "address": "15663 Hwy. 105 West / 77356", "acreage": "3.4", "notes": "Includes vacant property to west. See map for boundaries"},{"name": "Fire Station 7", "address": "7971 Longmire Road / 77304", "acreage": "2.0", "notes": "Restricted Access"},{"name": "Fire Training Facility", "address": "2357 Mike Meador Pkwy / 77303", "acreage": "4.8", "notes": "Restricted Access"},{"name": "Conroe Police Station", "address": "2300 Plantation Drive / 77304", "acreage": "11.5", "notes": "Includes ROW & median mowing on Plantation Blvd. Restricted Access See map for boundaries"},{"name": "Fire Arms Training Facility", "address": "2300 Sgt. Ed Holcomb Blvd. South / 77304", "acreage": "6.0", "notes": "Restricted Access Day & Time Constraints Does not include berm slopes"}]}"""
@@ -122,7 +124,15 @@ def main():
                 
                 
         if st.button("Evaluate the response", key= f"Evaluate {index}"):
-            compare_with_criteria(st.session_state["summary"])
+            ans = compare_with_criteria(st.session_state["summary"])
+            st.header('Evaluation:')
+            st.write(ans)
+
+        if st.button("save response", key = f"Save button{index}"):
+            with open(os.path.join("responses", file_name), "a") as file:
+                file.write(f"------------------------------------------ {st.session_state['summary']}")
+                st.write("Summary saved!")
+
             
 
 
@@ -144,13 +154,12 @@ def compare_with_criteria(summary):
     input = {'criteria':criteria,'summary':summary}
     ans = chain.run(input)
     print(ans)
-    st.header('Evaluation:')
-    st.write(ans)
+    return ans
 
 @st.cache_data
 def suggest_prompts(text):
     print("New REQUEST!!!!")
-    template = """I have some text which is a part of Request For Proposal Document. Suggest around 2 to 5 maximum prompts to extract the key/important information from the text which will be useful for preparing the Bid. Return an array of prompts. The prompt should be as if directing the AI to extract following information.
+    template = """I have some text which is a part of Request For Proposal Document. Suggest around 2 to 5 maximum questions to extract the key/important information from the text which will be useful for preparing the Bid. The question should target only a specific section of the text and should not be general. Return an array of question. The question should be as if directing the AI to extract following information.
     Text : {text}
     """ 
     PROMPT = PromptTemplate(
@@ -206,7 +215,7 @@ def create_chain(text, promptType):
     
     if promptType == 0 :
 
-        Template = """Given the context: "{context}", answer the following question by extracting only key information: "{question}" Format the response as array of json object or a single json object whichever suits best.
+        Template = """Given the context: "{context}", answer the following question based on the context in short by extracting only important information from the context: "{question}" Format the response as array of json object or a single json object whichever suits best.
         """
 
         PROMPT = PromptTemplate(
@@ -227,6 +236,7 @@ def create_chain(text, promptType):
                                 {{ "deadline": string // date of deadline or due date', 
                                     "inquiry": string // contact details of person to inquire in case of doubts', 
                                     "submission_address": string //address of the location where bid needs to be submitted,
+                                    "site-visit" string //information about site visits if required
                                     "miscellaneous" : string //any other important information,
                                     }}
                                 """,
@@ -249,6 +259,9 @@ def create_chain(text, promptType):
                                 {{ "task": string // name of the task',
                                     "total frequency" : string //total frequency,
                                     "month wise frequency" : string //frequency for each month
+                                    "quantity" : int //estimated quantity to apply if any in case of chemicals often abbreviated as Qty
+                                    "area" : string //area if mentioned,
+                                    "miscellaneous" : string //any extra information regarding the task
                                     }}
                                 ]""",
                 ),
@@ -271,8 +284,9 @@ def create_chain(text, promptType):
                     description="""array of json objects in the following format: [
                                 {{ "name": string // name of the site/location', 
                                     "address": string // address of that site/location', 
-                                    "acreage": string //acreage of the location,
+                                    "acreage": int //acreage of the location,
                                     "notes" : string //any notes regarding the location/site,
+                                    "frequency" : string //any information about frequency if mentioned
                                     }}
                                 ]""",
                 )

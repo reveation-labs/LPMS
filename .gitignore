@@ -1,5 +1,9 @@
 #Folders
+docs
 temp_files
+pdf_files
+markdown_files
+response 
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
